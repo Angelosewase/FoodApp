@@ -1,0 +1,188 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "KFC API",
+    "version": "1.0.0"
+  },
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "JWT": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization"
+    }
+  },
+  "security": [
+    {
+      "JWT": []
+    }
+  ],
+  "responses": {
+    "UnauthorizedError": {
+      "description": "Access token is missing or invalid"
+    }
+  },
+  "paths": {
+    "/api/v1/user/all": {
+      "get": {
+        "summary": "GET /users",
+        "operationId": "ListUsers",
+        "responses": {
+          "200": {
+            "description": "Users list users",
+            "schema": {
+              "users": {
+                "type": "array",
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/user/login": {
+      "post": {
+        "summary": "Login into your account",
+        "operationId": "Login",
+        "parameters": [
+          {
+            "name": "Credentials",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login into your account",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          }
+        },
+        "tags": ["Authentication"]
+      }
+    },
+    "/api/v1/user/create": {
+      "post": {
+        "summary": "Create new account",
+        "operationId": "Register",
+        "parameters": [
+          {
+            "name": "Credentials",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created account Response",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          }
+        },
+        "tags": ["Authentication"]
+      }
+    },
+    "/api/v1/user/update/{userId}": {
+      "put": {
+        "summary": "Update user information",
+        "operationId": "UpdateUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "UserData",
+            "in": "body",
+            "description": "User data to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/user/delete/{userId}": {
+      "delete": {
+        "summary": "Delete user account",
+        "operationId": "DeleteUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
+          }
+        },
+        "tags": ["User"]
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "AuthResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
